@@ -1,0 +1,10 @@
+^C:\USERS\DANYE\EFIMOV_D_A\BUILD\CMAKEFILES\ECF90015090AFB3CAD337FD26AA199D6\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/danye/efimov_d_a -BC:/Users/danye/efimov_d_a/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/danye/efimov_d_a/build/efimov_d_a.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
