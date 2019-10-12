@@ -180,6 +180,12 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 CMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 
 //Value Computed by CMake
+Complex_BINARY_DIR:STATIC=C:/Users/danye/Documents/GitHub/efimov_d_a/build/prj.labs/complex
+
+//Value Computed by CMake
+Complex_SOURCE_DIR:STATIC=C:/Users/danye/Documents/GitHub/efimov_d_a/prj.labs/complex
+
+//Value Computed by CMake
 Rational_BINARY_DIR:STATIC=C:/Users/danye/Documents/GitHub/efimov_d_a/build/prj.labs/rational
 
 //Value Computed by CMake
@@ -253,7 +259,7 @@ CMAKE_GENERATOR:INTERNAL=Visual Studio 16 2019
 //Generator instance identifier.
 CMAKE_GENERATOR_INSTANCE:INTERNAL=C:/Program Files (x86)/Microsoft Visual Studio/2019/Community
 //Name of generator platform.
-CMAKE_GENERATOR_PLATFORM:INTERNAL=x64
+CMAKE_GENERATOR_PLATFORM:INTERNAL=
 //Name of generator toolset.
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
 //Source directory with the top level CMakeLists.txt file for this
