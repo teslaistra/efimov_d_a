@@ -1,8 +1,0 @@
-C:/Users/danye/Documents/GitHub/efimov_d_a/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/danye/Documents/GitHub/efimov_d_a/build/CMakeFiles/ZERO_CHECK.dir
-C:/Users/danye/Documents/GitHub/efimov_d_a/build/prj.labs/complex/CMakeFiles/complex.dir
-C:/Users/danye/Documents/GitHub/efimov_d_a/build/prj.labs/complex/CMakeFiles/complex_lib.dir
-C:/Users/danye/Documents/GitHub/efimov_d_a/build/prj.labs/complex/CMakeFiles/ALL_BUILD.dir
-C:/Users/danye/Documents/GitHub/efimov_d_a/build/prj.labs/rational/CMakeFiles/rational.dir
-C:/Users/danye/Documents/GitHub/efimov_d_a/build/prj.labs/rational/CMakeFiles/rational_lib.dir
-C:/Users/danye/Documents/GitHub/efimov_d_a/build/prj.labs/rational/CMakeFiles/ALL_BUILD.dir
