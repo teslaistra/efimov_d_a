@@ -1,10 +1,10 @@
 #include <iostream>
-#include "StackL.h"
+#include "stackl.h"
 
 int main() {
 
 	
-	StackL sta;
+	stackl sta;
 	std::cout << "Is StackL empty?\n";
 	std::cout << sta.is_empty()<<"\n";
 	std::cout << "push 4 to StackL\n";

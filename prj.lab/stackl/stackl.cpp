@@ -1,9 +1,5 @@
-// StackL.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include "StackL.h"
 #include <iostream>
-
 
 StackL copy(const StackL& a) {
 	StackL b;
@@ -17,10 +13,7 @@ StackL copy(const StackL& a) {
 
 StackL::StackL(const StackL& a)
 {
-	//std::cout << a.top();
 	StackL b = copy(a);
-	//std::cout << b.top();
-
 	head = nullptr;
 	Node*t = b.head;
 
@@ -86,14 +79,14 @@ bool StackL::is_empty() const {
 
 float& StackL::top() {
 	if (is_empty()) {
-		throw;
+		throw new std::exception("stack is empty");
 	}
 	return head->value;
 }
 
 const float& StackL::top() const {
 	if (is_empty()) {
-		throw;
+		throw new std::exception("stack is empty");
 	}
 	return head->value;
 }

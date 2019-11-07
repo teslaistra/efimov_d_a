@@ -7,7 +7,7 @@
 #include <string>
 #include <Windows.h>
 using namespace std;
-#include "rational.h"
+#include <rational.h>
 
 int main() {
     using namespace std;
