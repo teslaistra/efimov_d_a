@@ -1,0 +1,3 @@
+add_executable(test_dynarrayT test_dynarrayT.cpp)
+target_link_libraries(test_dynarrayT dynarrayT)
+set_property(TARGET test_dynarrayT PROPERTY CXX_STANDARD 17)

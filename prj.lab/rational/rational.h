@@ -1,59 +1,52 @@
-//
-// Created by danye on 11.10.2019.
-//
+#ifndef RATIONAL_RATIONAL_H
+#define RATIONAL_RATIONAL_H
 
-#include <iostream>
-struct  Rational
-{
-    Rational& operator+=(const Rational& arg);
+#include <iosfwd>
 
-    Rational& operator/=(const Rational& first);
+class Rational {
+public:
+	Rational() = default;
+	Rational(const Rational&) = default;
+	explicit Rational(const int numerator);
+	Rational(const int numerator, const int denominator);
+	Rational& operator=(const Rational&) = default;
 
-    Rational& operator*=(const Rational& first);
+	Rational operator-() const;
+	Rational& operator+=(const Rational& rhs);
+	Rational& operator+=(const int rhs) { return operator+=(Rational(rhs)); }
+	Rational& operator-=(const Rational& rhs);
+	Rational& operator-=(const int rhs) { return operator-=(Rational(rhs)); }
+	Rational& operator*=(const Rational& rhs);
+	Rational& operator*=(const int rhs) { return operator*=(Rational(rhs)); }
+	Rational& operator/=(const Rational& rhs);
+	Rational& operator/=(const int rhs) { return operator/=(Rational(rhs)); }
 
-    Rational& operator-=(const Rational& first);
+	bool operator==(const Rational& rhs) const;
+	bool operator!=(const Rational& rhs) const;
+	bool operator>(const Rational& rhs);
+	bool operator<(const Rational& rhs);
+	bool operator>=(const Rational& rhs);
+	bool operator<=(const Rational& rhs);
 
-    Rational& operator=(const Rational& first);
+	std::ostream& write_to(std::ostream& ostrm) const;
+	std::istream& read_from(std::istream& istrn);
 
-    bool operator==(const Rational& first);
+	void normalize();
 
-    bool operator!=(const Rational& first);
-
-    bool operator<(const Rational& first);
-
-    bool operator>(const Rational& first);
-
-    bool operator>=(const Rational& first);
-
-    bool operator<=(const Rational& first);
-
-    int gcd(int a, int b);
-
-    Rational();
-    explicit Rational(const int chislit);
-    Rational(const int chislitel, const int znamenatel);
-
-    void check();
-
-    std::ostream &WriteTo(std::ostream &ostrm) const;
-    std::istream &ReadFrom(std::istream &istrm);
-
-    int chis{ 0 };
-    int znam{ 1 };
-
-    static const char lb{ '{' };
-    static const char sep{ '/' };
-    static const char rb{ '}' };
-
-    void simple();
-
-    friend std::ostream &operator<<(std::ostream &ostrm, const Rational &rhs);
-    friend std::istream &operator>>(std::istream &istrm, Rational &rhs);
+public:
+	int num_{ 0 };
+	int denum_{ 1 };
+	static const char lb{ '{' };
+	static const char sep{ '/' };
+	static const char rb{ '}' };
 };
 
-Rational operator+(const Rational& first, const Rational& second);
-Rational operator*(const Rational& first, const Rational& second);
-Rational operator-(const Rational& first, const Rational& second);
-Rational operator/(const Rational& first, const Rational& second);
+Rational operator+(const Rational& lhs, const Rational& rhs);
+Rational operator*(const Rational& lhs, const Rational& rhs);
+Rational operator/(const Rational& lhs, const Rational& rhs);
+Rational operator-(const Rational& lhs, const Rational& rhs);
 
-bool testParse(const std::string& str);
+std::ostream& operator<<(std::ostream& ostrm, const Rational& rhs);
+std::istream& operator>>(std::istream& istrm, Rational& rhs);
+
+#endif

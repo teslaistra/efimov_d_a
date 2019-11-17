@@ -1,4 +1,5 @@
 add_subdirectory(test_complex)
+add_subdirectory(test_dynarrayT)
 add_subdirectory(catch2_complex)
 add_subdirectory(catch2_dynarray)
 add_subdirectory(catch2_rational)

@@ -4,173 +4,219 @@
 #include <locale>
 #include <string>
 #include <Windows.h>
+using namespace std;
 #include "rational.h"
 
-Rational::Rational(const int chislit) {
-    chis = chislit;
-    znam = 1;
-}
-Rational::Rational(const int chislitel, const int znamenatel) {
-    chis = chislitel;
-    znam = znamenatel;
-    check();
+Rational::Rational(const int numerator, const int denominator)
+	: num_(numerator), denum_(denominator) {
+	if (0 == denum_) {
+		throw std::invalid_argument("Деление на ноль в конструкторе");
+	}
+	normalize();
+
 }
 
-void Rational::check() {
-    using namespace std;
-    if (znam == 0) { cout << "You are trying divide on zero"; znam = 1; }
+int gcd(int a, int b)
+{
+	while ((a != b) && (a != 0))
+	{
+		if (a > b) a -= b;
+		else b -= a;
+	}
+	return(b);
 }
 
-int Rational::gcd(int a, int b) {
-    while (a != b) {
-        if (a > b) a = a - b;
-        else b = b - a;
-    }
-    return(a);
+Rational Rational::operator-() const {
+	return Rational(-num_, denum_);
 }
 
-Rational& Rational::operator+=(const Rational& arg) { //ўбҐЈ¤  ў®§ўа й вм ббл«Єг ­  бҐЎп
-    chis = chis * arg.znam + arg.chis * znam;
-    znam = znam * arg.znam;
-    return (*this);
+Rational& Rational::operator+=(const Rational& arg) { //всегда возвращать ссылку на себя
+	num_ = num_ * arg.denum_ + arg.num_ * denum_;
+	denum_ = denum_ * arg.denum_;
+	normalize();
+	return (*this);
 }
+
+Rational& Rational::operator-=(const Rational& rhs)
+{
+	num_ = num_ * rhs.denum_ - denum_ * rhs.num_;
+	denum_ = denum_ * rhs.denum_;
+	normalize();
+	return *this;
+}
+
 Rational& Rational::operator/=(const Rational& first) {
-    chis *= first.znam;
-    znam *= first.chis;
-    return (*this);
-};
+	num_ *= first.denum_;
+	denum_ *= first.num_;
+	normalize();
+	return (*this);
+}
+bool Rational::operator==(const Rational& rhs) const {
+	return num_ == rhs.num_ && denum_ == rhs.denum_;
+}
+void Rational::normalize()
+{
+	if (denum_ == 0) throw std::invalid_argument("zero in denumenator");
+	int i = gcd(abs(num_), abs(denum_));
+	num_ /= i;
+	denum_ /= i;
+	if (denum_ < 0) {
+		num_ *= -1;
+		denum_ *= -1;
+	}
+	/*
+	int a = abs(num_);
+	int b = abs(denum_);
+	while ((a != b) && (a != 0))
+	{
+		if (a > b) a -= b;
+		else b -= a;
+	}
+	num_ /= b;
+	denum_ /= b;
+	if (denum_ < 0) {
+		num_ *= -1;
+		denum_ *= -1;
+	};
+	*/
+}
 
 Rational& Rational::operator*=(const Rational& first) {
-    chis *= first.chis;
-    znam *= first.znam;
-    return *this;
+	num_ *= first.num_;
+	denum_ *= first.denum_;
+	normalize();
+	return *this;
 };
 
-Rational& Rational::operator-=(const Rational& first) {
-    chis = chis * first.znam - first.chis * znam;
-    znam = znam * first.znam;
-    return *this;
-};
 
-Rational& Rational::operator=(const Rational& first) = default;
-
-bool Rational::operator==(const Rational& first) {
-    return (first.znam == znam && chis == first.chis);
-}
-
-bool Rational::operator!=(const Rational& first) {
-    return !operator==(first);
+bool Rational::operator!=(const Rational& first) const {
+	return !operator==(first);
 }
 
 bool Rational::operator<(const Rational& first)
 {
-    return chis * first.znam < first.znam * znam;
+	if (num_ * first.denum_ < first.denum_ * denum_) return true;
+	return false;
 }
 
-bool Rational::operator>(const Rational& first)
+bool Rational::operator>(const Rational& first) 
 {
-    return !operator<(first);
+	return !operator<(first);
 }
 
 bool Rational::operator>=(const Rational& first)
 {
-    return(operator==(first) || operator>(first));
+	return(operator==(first) || operator>(first));
 }
 
 bool Rational::operator<=(const Rational& first)
 {
-    return(operator==(first) || !operator>(first));
+	return(operator==(first) || !operator>(first));
 }
 
+Rational::Rational(const int num_lit) {
+	num_ = num_lit;
+	denum_ = 1;
+}
+
+
+std::ostream& operator<<(std::ostream& ostrm, const Rational& rhs)
+{
+	return rhs.write_to(ostrm);
+}
+
+std::istream& operator>>(std::istream& istrm, Rational& rhs)
+{
+	return rhs.read_from(istrm);
+}
+/*
+std::istream& Rational::read_from(std::istream& istrm) {
+	char leftBrace(0);
+	int num_lit(0);
+	char separator(0);
+	int denum_ental(1);
+	char rightBrace(0);
+	istrm >> num_lit >> separator >> denum_ental;
+	if (istrm.good()) {
+		if (sep == separator) {
+			num_ = num_lit;
+			denum_ = denum_ental;
+		}
+		else {
+			istrm.setstate(std::ios_base::failbit);
+		}
+	}
+	return istrm;
+}
+*/
+std::istream& Rational::read_from(std::istream& istrm) {
+	// TODO:
+	istrm >> num_;
+	char c(0);
+	istrm.get(c);
+	if ('/' != c) {
+		istrm.setstate(std::ios_base::failbit);
+	}
+	istrm.get(c);
+	if (c < '0' || '9' < c) {
+		istrm.setstate(std::ios_base::failbit);
+	}
+	istrm.putback(c);
+	istrm >> denum_;
+	normalize();
+	return istrm;
+}
+
+std::ostream& Rational::write_to(std::ostream& ostrm)  const
+{
+	ostrm << num_ << sep << denum_;
+	return ostrm;
+}
 Rational operator+(const Rational& first, const Rational& second) {
-    Rational sum;
-    sum.chis = first.chis * second.znam + second.chis * first.znam;
-    sum.znam = first.znam * second.znam;
-    return sum;
+	Rational sum;
+	sum.num_ = first.num_ * second.denum_ + second.num_ * first.denum_;
+	sum.denum_ = first.denum_ * second.denum_;
+	sum.normalize();
+	return sum;
 };
 
 Rational operator-(const Rational& first, const Rational& second) {
-    Rational res;
-    res.chis = first.chis * second.znam - second.chis * first.znam;
-    res.znam = first.znam * second.znam;
-    return res;
+	Rational res;
+	res.num_ = first.num_ * second.denum_ - second.num_ * first.denum_;
+	res.denum_ = first.denum_ * second.denum_;
+	res.normalize();
+	return res;
 };
 
 Rational operator*(const Rational& first, const Rational& second) {
-    Rational mul;
-    mul.chis = first.chis * second.chis;
-    mul.znam = first.znam * second.znam;
-    return mul;
+	Rational mul;
+	mul.num_ = first.num_ * second.num_;
+	mul.denum_ = first.denum_ * second.denum_;
+	mul.normalize();
+
+	return mul;
 }
 
+
 Rational operator/(const Rational& first, const Rational& second) {
-    Rational div;
-    div.chis = first.chis * second.znam;
-    div.znam = first.znam * second.chis;
-    return div;
+	Rational div;
+	div.num_ = first.num_ * second.denum_;
+	div.denum_ = first.denum_ * second.num_;
+	div.normalize();
+	return div;
 };
 
 bool testParse(const std::string& str) {
-    using namespace std;
-    istringstream istrm(str);
-    Rational z;
-    istrm >> z;
+	using namespace std;
+	istringstream istrm(str);
+	Rational z;
+	istrm >> z;
 
-    if (istrm.good()) {
-        cout << "Read success: " << str << " -> " << z << endl;
-    }
-    else {
-        cout << "Read error : " << str << " -> " << z << endl;
-    }
-    return istrm.good();
-}
-
-void Rational::simple() {
-    int i = gcd(chis, znam);
-    chis /= i;
-    znam /= i;
-}
-
-std::ostream &operator<<(std::ostream &ostrm, const Rational &rhs) {
-    return rhs.WriteTo(ostrm);
-}
-
-std::istream &operator>>(std::istream &istrm, Rational &rhs) {
-
-    return rhs.ReadFrom(istrm);
-
-}
-
-std::ostream &Rational::WriteTo(std::ostream &ostrm) const {
-    ostrm << lb << chis << sep << znam << rb;
-    return ostrm;
-}
-
-std::istream &Rational::ReadFrom(std::istream &istrm) {
-    char lb{ '{' };
-    char sep{ '/' };
-    char rb{ '}' };
-
-    istrm >> lb >>  chis >> sep >> znam >> rb;
-
-    if (istrm.good()) {
-
-        if ((Rational::lb == lb) && (Rational::sep == sep) &&
-            (Rational::rb == rb)) {
-
-            Rational::chis = chis;
-            Rational::znam =znam;
-
-            Rational::check();
-            Rational::simple();
-        }
-        else {
-            istrm.setstate(std::ios_base::failbit);
-        }
-    }
-    return istrm;
-}
-
-Rational::Rational() {chis=1; znam=1;
-
+	if (istrm.good()) {
+		cout << "Read success: " << str << " -> " << z << endl;
+	}
+	else {
+		cout << "Read error : " << str << " -> " << z << endl;
+	}
+	return istrm.good();
 }

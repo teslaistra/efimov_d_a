@@ -1,43 +1,68 @@
 //
 // Created by danye on 11.10.2019.
 //
-#include <iostream>
-#include <sstream>
+#ifndef COMPLEX_COMPLEX_H_20191010
+#define COMPLEX_COMPLEX_H_20191010
 
-#include <locale>
-#include <string>
-#include <Windows.h>
+#include <iosfwd>
+
 struct Complex {
-    Complex() {}
-    explicit Complex(const double real); //можно только так MyClass ob(110)
-    Complex(const double real, const double imaginary);
-    bool operator==(const Complex& com) const;
-    bool operator!=(const Complex& com) const;
+	Complex() = default;
+	Complex(const Complex&) = default;
+	explicit Complex(const double real);
+	Complex(const double real, const double imaginary);
+	~Complex() = default;
+	Complex& operator=(const Complex&) = default;
 
-    Complex& operator+=(const Complex& rhs);
-    Complex& operator+=(const double rhs);
+	Complex(Complex&&) = default;
+	Complex& operator=(Complex&&) = default;
 
-    Complex& operator-=(const Complex& rhs);
-    Complex& operator-=(const double rhs);
+	Complex operator-() const { return Complex(-re, -im); }
 
-    Complex& operator*=(const Complex& rhs);
-    std::ostream& writeTo(std::ostream& ostrm) const;
-    std::istream& readFrom(std::istream& istrm);
+	bool operator==(const Complex& rhs) const;
+	bool operator!=(const Complex& rhs) const;
+	Complex& operator+=(const Complex& rhs);
+	Complex& operator+=(const double rhs);
+	Complex& operator-=(const Complex& rhs);
+	Complex& operator-=(const double rhs);
+	Complex& operator*=(const Complex& rhs);
+	Complex& operator*=(const double rhs);
+	Complex& operator/=(const Complex& rhs);
+	Complex& operator/=(const double rhs);
 
-    double re{ 0.0 };
-    double im{ 0.0 };
+	std::ostream& write_to(std::ostream& ostrm) const;
+	std::istream& read_from(std::istream& istrm);
 
-    static const char lb{ '{' };
-    static const char sep{ ',' };
-    static const char rb{ '}' };
+	double re{ 0.0 };
+	double im{ 0.0 };
 
-    friend std::ostream &operator<<(std::ostream &ostrm, const Complex &rhs);
-    friend std::istream &operator>>(std::istream &istrm, Complex &rhs);
-    };
+	static const char leftBrace{ '{' };
+	static const char separator{ ',' };
+	static const char rightBrace{ '}' };
+};
 
-Complex operator+(const Complex& c1, const Complex& c2);
-Complex operator-(const Complex& c1, const Complex& c2);
+Complex operator+(const Complex& lhs, const Complex& rhs);
+Complex operator+(const Complex& lhs, const double rhs);
+Complex operator+(const double lhs, const Complex& rhs);
 
-Complex operator*(const Complex& c1, const Complex& c2) ;
-Complex operator/(const Complex& c1, const Complex& c2) ;
+Complex operator-(const Complex& lhs, const Complex& rhs);
+Complex operator-(const Complex& lhs, const double rhs);
+Complex operator-(const double lhs, const Complex& rhs);
 
+Complex operator*(const Complex& lhs, const Complex& rhs);
+Complex operator*(const Complex& lhs, const double rhs);
+Complex operator*(const double lhs, const Complex& rhs);
+
+Complex operator/(const Complex& lhs, const Complex& rhs);
+Complex operator/(const Complex& lhs, const double rhs);
+Complex operator/(const double lhs, const Complex& rhs);
+
+inline std::ostream& operator<<(std::ostream& ostrm, const Complex& rhs) {
+	return rhs.write_to(ostrm);
+}
+
+inline std::istream& operator>>(std::istream& istrm, Complex& rhs) {
+	return rhs.read_from(istrm);
+}
+
+#endif
